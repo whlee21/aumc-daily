@@ -1,6 +1,6 @@
-drop table if exists cdmpv532_real.provider;;
+drop table if exists cdmpv532_daily.provider;;
 
-create table cdmpv532_real.provider as
+create table cdmpv532_daily.provider as
 select cast(p1.uid               as bigint)       as provider_id
      , cast(null                 as varchar(255)) as provider_name
      , cast(null                 as varchar(20))  as npi
@@ -13,20 +13,20 @@ select cast(p1.uid               as bigint)       as provider_id
      , cast(p1.job_category_cd   as varchar(50))  as specialty_source_value
      , cast(null                 as integer)      as specialty_source_concept_id
      , cast(p1.gender            as varchar(50))  as gender_source_value
-     , cast(0                    as integer)      as gender_source_concept_id
-     from itfcdmpv532_real.mt_provider p1
-  left join mapcdmpv532_real.map_gb m1 
+     , cast(0                    as integer)      as gender_source_concept_id --gender source can 0?
+     from itfcdmpv532_daily.mt_provider p1
+  left join mapcdmpv532_daily.map_gb m1 
     on p1.job_category_cd = m1.source_value 
    and m1.idx  = 2115
-  left join mapcdmpv532_real.map_gb m2 
+  left join mapcdmpv532_daily.map_gb m2 
     on p1.gender = m2.source_value 
    and m2.idx = 39
-  left join itfcdmpv532_real.mt_care_site c1 
+  left join itfcdmpv532_daily.mt_care_site c1 
     on p1.dept_cd = c1.dept_cd AND c1.rn=1
  where p1.rn = 1
 ;;
 /*********************************************************************
 INDEX
 ***********************************************************************/
-ALTER TABLE cdmpv532_real.provider ADD CONSTRAINT xpk_provider PRIMARY KEY ( provider_id ) ;;
+ALTER TABLE cdmpv532_daily.provider ADD CONSTRAINT xpk_provider PRIMARY KEY ( provider_id ) ;;
 

@@ -20,16 +20,16 @@ select cast(p1.uid                                          as bigint)       as 
 	 , cast(null                                    	    as varchar(50))  as ethnicity_source_value
 	 , cast(0	                                      	    as integer)      as ethnicity_source_concept_id
   from itfcdmpv532_daily.mt_person p1 
-  left join cdmpv532."location" l1 
-    on p1.zip_cd = l1.location_source_value
+  left join cdmpv532_daily."location" l1 
+    on p1.zip_cd = l1.location_source_value::varchar
   left join mapcdmpv532_daily.map_gb m1 
-    on p1.gender = m1.source_value 
+    on p1.gender = m1.source_value::varchar 
    and m1.idx = 29
   left join mapcdmpv532_daily.map_gb m2 
-    on p1.race_gb = m2.source_value 
+    on p1.race_gb = m2.source_value::varchar
    and m2.idx = 368
   left join mapcdmpv532_daily.map_gb m3
-    on p1.foreigner_gb = m3.source_value 
+    on p1.foreigner_gb = m3.source_value::varchar
    and m3.idx = 368
  where p1.rn = 1 
  ;

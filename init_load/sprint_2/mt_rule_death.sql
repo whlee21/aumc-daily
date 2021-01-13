@@ -1,6 +1,6 @@
-drop table if exists itfcdmpv532_real.mt_rule_death;
+drop table if exists itfcdmpv532_daily.mt_rule_death;
 
-create table itfcdmpv532_real.mt_rule_death as
+create table itfcdmpv532_daily.mt_rule_death as
 select t.uid
      , t.patient_id
      , t.death_dt
@@ -33,6 +33,6 @@ select t.uid
 
 
 -----------------------------check cnt
-insert into cdw_real.etl_task_check(task_grp_id, task_id, table_name, cnt)
+insert into ods_daily.etl_task_check(task_grp_id, task_id, table_name, cnt)
 select (SELECT last_value FROM etl_task_check_grp_id), 'mt_rule_death' , 'mt_rule_death', count(*) as cnt
 from itfcdmpv532_daily.mt_rule_death ;

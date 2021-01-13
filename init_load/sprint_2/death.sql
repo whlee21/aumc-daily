@@ -11,7 +11,7 @@ select cast(p1.uid                           as bigint)                  as pers
   from itfcdmpv532_daily.mt_death d1
  inner join itfcdmpv532_daily.itf_person p1 
     on d1.patient_id = p1.patient_id 
-  left join mapcdmpv532.map_gb m1 
+  left join mapcdmpv532_daily.map_gb m1 
     on d1.reference_gb = m1.source_value 
    and m1.idx = 401
  where d1.rn = 1
