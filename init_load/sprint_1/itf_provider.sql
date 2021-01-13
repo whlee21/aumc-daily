@@ -26,10 +26,8 @@ select uid
      , now() as etl_dt
 from ( 
 	select  
-	    --a.userid :: bigint AS uid
 	    a.cdm_userid :: bigint AS uid
-	  --, a.userid:: VARCHAR(50) AS provider_id
-	  , a.cdm_userid:: VARCHAR(50) AS provider_id
+	  , a.cdm_empno :: VARCHAR(50) AS provider_id
 	  , case when a.drst is not null then concat(e.spdept ,'/',a.drst) end :: VARCHAR(20) AS job_category_cd
 	  , case when a.drst is not null then concat(f.codename ,'/', d.codename) end :: VARCHAR(50) job_category_nm
 	  --, a.birth_dt :: INT AS year_of_birth -- All birth_dt were null in ods_daily.csusermt
