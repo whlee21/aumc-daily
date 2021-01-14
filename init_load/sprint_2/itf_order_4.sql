@@ -21,27 +21,24 @@ CREATE  TABLE itfcdmpv532_daily.itf_order_4 AS
             , NULL                   AS start_dt
             , A.orddate              AS order_dt
             , A.meddate              AS medical_dt
-            , A.opdate               AS operation_dt
-            , A.exectime             AS act_dt
-            , A.anethstm             AS anesthesia_dt
+            , null               	AS operation_dt
+            , null		             AS act_dt  
+            , null             AS anesthesia_dt
             , A.meddept              AS medical_dept
             , 'N'                   AS self_drug_yn
-            , A.opseqno::VARCHAR      AS operation_seq
+            , null      AS operation_seq
             , 'N'                    AS tot_order_yn
             , NULL                   AS tot_order_qty
-            , LEFT(CASE
-                  WHEN COALESCE(A.DAY,0) = '0' THEN '1'
-                  ELSE A.DAY
-             END::VARCHAR, 6)::FLOAT                    AS order_day
+            , NULL                   AS order_day
             , 1                      AS order_qty1
             , NULL                   AS order_qty2
-            , LEFT(A.CNT::VARCHAR,6)::FLOAT AS order_cnt
+            , NULL 					 AS order_cnt
             , A.orddr                AS order_dr
             , NULL                   AS procedure_provider
             , NULL                   AS device_provider
             , A.chadr                AS charge_dr
-            , A.opdr                 AS operation_dr
-            , A.anethdr              AS anesthesia_dr
+            , NULL                 AS operation_dr
+            , NULL              AS anesthesia_dr
             , NULL                   AS act_dr
             , NULL                   AS act_provider
             , NULL                   AS medical_dr
@@ -55,7 +52,7 @@ CREATE  TABLE itfcdmpv532_daily.itf_order_4 AS
             , 'N'                    AS prn_act_yn
             , 'N'                    AS pre_order_yn
             , 'N'                    AS pre_order_act_yn
-            , A.methodcd             AS method_cd
+            , C.methodcd             AS method_cd
             , NULL                   AS verbatim_end_date
             , NULL                   AS stop_dt
             , NULL                   AS stop_cause
@@ -77,6 +74,11 @@ CREATE  TABLE itfcdmpv532_daily.itf_order_4 AS
  LEFT JOIN ods_daily.mnoutact C ON A.PATNO = C.PATNO AND A.meddept = C.meddept AND A.ORDDATE = C.ORDDATE AND A.ORDSEQNO = C.ORDSEQNO AND
                                A.ORDCODE = C.ORDCODE AND A.PATFG IN ('G','H','M','O') AND C.rejttime is null
  WHERE  A.ordclstyp = 'F1';
+/*
+ *SQL Error [23505]: ERROR: duplicate key value violates unique constraint "pg_type_typname_nsp_index"
+  Detail: Key (typname, typnamespace)=(itf_order_4, 16396) already exists.
+ */
+
 
  -----------------------------check cnt
 insert into ods_daily.etl_task_check(task_grp_id, task_id, table_name, cnt)

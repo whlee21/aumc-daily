@@ -84,6 +84,12 @@ FROM ods_daily.MMEXMORT  A
  WHERE A.ORDCLSTYP IN ('C1', 'C2', 'C3')
 ;
 
+
+/*
+ SQL Error [23505]: ERROR: duplicate key value violates unique constraint "pg_type_typname_nsp_index"
+ Detail: Key (typname, typnamespace)=(itf_order_3, 16396) already exists.
+ */
+
 -----------------------------check cnt
 insert into ods_daily.etl_task_check(task_grp_id, task_id, table_name, cnt)
 select (SELECT last_value FROM etl_task_check_grp_id), 'itf_order_3' , 'itf_order_3', count(*) as cnt
