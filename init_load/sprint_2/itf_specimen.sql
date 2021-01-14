@@ -10,9 +10,23 @@
 
 cnt : 
 time : 
+Comments(JCho): isfloat 임의 생성. 추후 수정필요
 *****************************************************/
 DROP TABLE if exists itfcdmpv532_daily.itf_specimen;;
 
+----- Declare of isfloat function
+CREATE OR REPLACE FUNCTION isfloat(text) RETURNS BOOLEAN AS $$
+DECLARE x FLOAT;
+BEGIN
+    x = $1::FLOAT;
+    RETURN TRUE;
+EXCEPTION WHEN others THEN
+    RETURN FALSE;
+END;
+$$
+STRICT
+LANGUAGE plpgsql IMMUTABLE;
+----- end of function
 
 CREATE TABLE itfcdmpv532_daily.itf_specimen as
 select
@@ -30,7 +44,7 @@ select
         ,trim(c.OPTVALUE4)    ::  varchar(50) AS specimen_cd
         ,null   ::  varchar(50) AS site
         ,null   ::  varchar(50) AS unit
-        ,case when ods_daily.is_float(translate(c.OPTVALUE9, '0123456789.-' || c.OPTVALUE9, '0123456789.-')) then translate(c.OPTVALUE9, '0123456789.-' || c.OPTVALUE9, '0123456789.-') else null end ::  float AS quantity
+        ,case when isfloat(translate(c.OPTVALUE9, '0123456789.-' || c.OPTVALUE9, '0123456789.-')) then translate(c.OPTVALUE9, '0123456789.-' || c.OPTVALUE9, '0123456789.-') else null end ::  float AS quantity
         ,a.PROCSTAT ::  varchar(50) AS examination_yn
         ,d.RSLTTEXT ::  varchar(50) AS examination_rslt
         ,case when a.cancelps = 'C' then 'Y'
