@@ -9,6 +9,8 @@
 프로그램 설명 :  payer plan period 정보 선적재
 cnt: 
 time: 
+
+Comments(JCho): 해당 정보가 Payer plan period에 부합하는지 모르겠음(National health insurance의 cover period가 아닌 것 같음).  
 *****************************************************/
 
 
