@@ -23,10 +23,10 @@ NEDIS의 내원수단 (입원경로)
 cnt:
 time: 
 *****************************************************/
-drop table if exists ods_daily.ITF_VISIT_EI;;
+drop table if exists itfcdmpv532_daily.ITF_VISIT_EI;;
 
-CREATE TABLE ods_daily.ITF_VISIT_EI as
-select 
+CREATE TABLE itfcdmpv532_daily.ITF_VISIT_EI as
+SELECT 
         a.patno ::text as patient_id                --환자id
         , a.admtime ::text as admission_dt      --입원일시
         , case

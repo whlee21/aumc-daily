@@ -11,7 +11,7 @@ select c.*
             , cast(c1.dept_nm           as varchar(50))  as place_of_service_source_value
          from itfcdmpv532_daily.mt_care_site c1
          left join cdmpv532_daily.location l1  
-           on c1.zip_cd = l1.location_source_value
+           on c1.zip_code_3::integer = l1.location_source_value::integer
          left join mapcdmpv532_daily.map_gb m1 
            on c1.place_of_service = m1.source_value 
           and m1.idx = 153
@@ -19,7 +19,8 @@ select c.*
         
         union all 
         
-       select care_site_id::bigint, target_value::varchar, source_value::integer, source_value_nm::integer, target_value_nm::varchar, source_col::varchar from mapcdmpv532_daily.constant where idx = 9999
+       --select care_site_id::bigint, target_value::varchar, source_value::integer, source_value_nm::varchar, target_value_nm::varchar, source_col::varchar from mapcdmpv532_daily.constant where idx = 9999
+       select care_site_id::bigint, target_value_nm ::varchar(255), source_value::integer, 308 as location_id, target_value::varchar(50), target_value_nm::varchar(50) from mapcdmpv532_daily.constant where idx = 9999
  ) c 
 ;;
 /*****************************************************

@@ -12,7 +12,6 @@ cnt:
 *****************************************************/
 DROP TABLE if exists itfcdmpv532_daily.itf_order_2;;
 
-
  CREATE  TABLE itfcdmpv532_daily.itf_order_2 AS
          SELECT A.patno
                  , A.patfg                AS visit_gb
@@ -23,7 +22,8 @@ DROP TABLE if exists itfcdmpv532_daily.itf_order_2;;
                  , A.orddate              AS order_dt
                  , A.meddate              AS medical_dt
                  , A.opdate               AS operation_dt
-                 , A.exectime             AS act_dt
+                 --, A.exectime             AS act_dt
+                 , A.execpldt             AS act_dt --실시예정일자 
                  , A.anethstm             AS anesthesia_dt
                  , A.meddept              AS medical_dept
                  , 'N'                   AS self_drug_yn
@@ -56,7 +56,8 @@ DROP TABLE if exists itfcdmpv532_daily.itf_order_2;;
                  , 'N'                    AS prn_act_yn
                  , 'N'                    AS pre_order_yn
                  , 'N'                    AS pre_order_act_yn
-                 , A.methodcd             AS method_cd
+                 --, A.methodcd             AS method_cd --용법코드(내복약:MM011,주사제:MM012,외용약:MM013)
+                 , C.methodcd             AS method_cd --용법코드(내복약:MM011,주사제:MM012,외용약:MM013)
                  , NULL                   AS verbatim_end_date
                  , NULL                   AS stop_dt
                  , NULL                   AS stop_cause

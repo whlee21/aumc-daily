@@ -5,9 +5,8 @@
 최초 작성일 : 2020-12-03
 수정일      :
 소스 테이블(기본) : ps3010 (부서정보)
-소스 테이블(참조) : 
-프로그램 설명 : 부서정보  - 초기 적재
-cnt: 
+소스 테이블(참조) :
+프로그램 설명 : 부서정보 - 초기 적재  
 *****************************************************/
 
   
@@ -29,5 +28,5 @@ where use_fg = 'Y'
 -----------------------------check cnt
 insert into ods_daily.etl_task_check(task_grp_id, task_id, table_name, cnt)
 select (SELECT last_value FROM etl_task_check_grp_id), 'itf_care_site' , 'itf_care_site', count(*) as cnt
-from itfcdmpv532_real.itf_care_site ;
-
+--from itfcdmpv532_real.itf_care_site ;
+from itfcdmpv532_daily.itf_care_site ;

@@ -13,10 +13,26 @@ CREATE INDEX person_patno_idx ON ods_daily.person (patno);
 CREATE INDEX sldspcct_examcode_idx ON ods_daily.sldspcct (examcode,spccode,appltime);
 CREATE INDEX slrefert_examcode_idx ON ods_daily.slrefert (EXAMCODE,REFFG,SPCCODE,APPLTIME,SEX,AGETOTAL);
 CREATE INDEX slrsltdt_workarea_idx ON ods_daily.slrsltdt (workarea,workdate,labno,ordcode,subitem);
+
+Comments(JCho): isnumeric 임의 생성. 추후 수정 필요 
 *****************************************************/
 
 DROP TABLE IF EXISTS ITFCDMPV532_daily.ITF_MEASUREMENT_1;;
 
+
+----- Declare of isnumeric function
+CREATE OR REPLACE FUNCTION isnumeric(text) RETURNS BOOLEAN AS $$
+DECLARE x NUMERIC;
+BEGIN
+    x = $1::NUMERIC;
+    RETURN TRUE;
+EXCEPTION WHEN others THEN
+    RETURN FALSE;
+END;
+$$
+STRICT
+LANGUAGE plpgsql IMMUTABLE;
+----- end of function
 
 create  TABLE itfcdmpv532_daily.ITF_MEASUREMENT_1
 AS
@@ -58,7 +74,8 @@ select a.PATNO                                          as patient_id
                 WHEN POSITION('=' IN coalesce(b.RSLTNUM, a.RSLTNUM)) > 0 THEN '='
           ELSE NULL
           END                                           as result_operator 
-      ,CASE WHEN ods_daily.IS_NUMERIC(TRANSLATE(coalesce(b.RSLTNUM, a.RSLTNUM), '0123456789.-' || coalesce(b.RSLTNUM, a.RSLTNUM), '0123456789.-')) THEN TRANSLATE(coalesce(b.RSLTNUM, a.RSLTNUM), '0123456789.-' || coalesce(b.RSLTNUM, a.RSLTNUM), '0123456789.-') ELSE NULL END AS RESULT_NUM
+      --,CASE WHEN ods_daily.IS_NUMERIC(TRANSLATE(coalesce(b.RSLTNUM, a.RSLTNUM), '0123456789.-' || coalesce(b.RSLTNUM, a.RSLTNUM), '0123456789.-')) THEN TRANSLATE(coalesce(b.RSLTNUM, a.RSLTNUM), '0123456789.-' || coalesce(b.RSLTNUM, a.RSLTNUM), '0123456789.-') ELSE NULL END AS RESULT_NUM
+      ,CASE WHEN isnumeric(TRANSLATE(coalesce(b.RSLTNUM, a.RSLTNUM), '0123456789.-' || coalesce(b.RSLTNUM, a.RSLTNUM), '0123456789.-')) THEN TRANSLATE(coalesce(b.RSLTNUM, a.RSLTNUM), '0123456789.-' || coalesce(b.RSLTNUM, a.RSLTNUM), '0123456789.-') ELSE NULL END AS RESULT_NUM
       ,CASE WHEN coalesce(b.RSLTNUM, a.RSLTNUM) = 'Positive(+)' THEN '+'
             WHEN coalesce(b.RSLTNUM, a.RSLTNUM) = 'Pos(+)' THEN '+'
             WHEN coalesce(b.RSLTNUM, a.RSLTNUM) = 'Pos(++)' THEN '++'

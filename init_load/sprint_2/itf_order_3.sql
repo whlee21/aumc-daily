@@ -9,6 +9,8 @@
 소스 테이블(참조) : MNWADACT(병동실시내역), MNOUTACT(외래실시내역)
 프로그램 설명 : 처방관련 (처치, 약, 재료) 데이터 적재
 cnt:
+
+Comments(JCho): MMEXMORT table에 anesthesia 관련 정보 없음 -> order 내린 날짜 혹은 닥터로 치환 /day -> 약이 아니기 때문에 처방 일수가 없을 것으로 고려하여 null 
 *****************************************************/
 DROP TABLE if exists itfcdmpv532_daily.itf_order_3;;
 
@@ -23,16 +25,18 @@ SELECT A.patno
             , A.meddate              AS medical_dt
             , A.opdate               AS operation_dt
             , A.exectime             AS act_dt
-            , A.anethstm             AS anesthesia_dt
+            --, A.anethstm             AS anesthesia_dt
+            , NULL             AS anesthesia_dt
             , A.meddept              AS medical_dept
             , 'N'                   AS self_drug_yn
             , A.opseqno::VARCHAR      AS operation_seq
             , 'N'                    AS tot_order_yn
             , NULL                   AS tot_order_qty
-            , LEFT(CASE
-                  WHEN COALESCE(A.DAY,0) = '0' THEN '1'
-                  ELSE A.DAY
-             END::VARCHAR, 6)::FLOAT                    AS order_day
+            --, LEFT(CASE
+            --      WHEN COALESCE(A.DAY,0) = '0' THEN '1'
+            --     ELSE A.DAY
+            -- END::VARCHAR, 6)::FLOAT                    AS order_day
+            , NULL                   AS order_day -- 검사는 당일 이뤄지기 때문에 처방일수가 필요 없을것으로 생각 								
             , 1                      AS order_qty1
             , NULL                   AS order_qty2
             , LEFT(A.CNT::VARCHAR,6)::FLOAT AS order_cnt
@@ -40,8 +44,9 @@ SELECT A.patno
             , NULL                   AS procedure_provider
             , NULL                   AS device_provider
             , A.chadr                AS charge_dr
-            , A.opdr                 AS operation_dr
-            , A.anethdr              AS anesthesia_dr
+            , A.orddr                 AS operation_dr
+            --, A.anethdr              AS anesthesia_dr
+            , A.orddr              AS anesthesia_dr -- 검사이기 때문에 anesthesia 관련 없을 것으로 생각되나, order doctor로 입력  
             , NULL                   AS act_dr
             , NULL                   AS act_provider
             , NULL                   AS medical_dr
@@ -55,7 +60,7 @@ SELECT A.patno
             , 'N'                    AS prn_act_yn
             , 'N'                    AS pre_order_yn
             , 'N'                    AS pre_order_act_yn
-            , A.methodcd             AS method_cd
+            , C.methodcd             AS method_cd
             , NULL                   AS verbatim_end_date
             , NULL                   AS stop_dt
             , NULL                   AS stop_cause
@@ -78,6 +83,12 @@ FROM ods_daily.MMEXMORT  A
                                A.ORDCODE = C.ORDCODE AND A.PATFG IN ('G','H','M','O') AND C.rejttime is null
  WHERE A.ORDCLSTYP IN ('C1', 'C2', 'C3')
 ;
+
+
+/*
+ SQL Error [23505]: ERROR: duplicate key value violates unique constraint "pg_type_typname_nsp_index"
+ Detail: Key (typname, typnamespace)=(itf_order_3, 16396) already exists.
+ */
 
 -----------------------------check cnt
 insert into ods_daily.etl_task_check(task_grp_id, task_id, table_name, cnt)

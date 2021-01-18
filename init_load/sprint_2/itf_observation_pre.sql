@@ -15,9 +15,9 @@ DELETE from ods_daily.MRF_ATTR WHERE attr_nm IN ('진료과', '작성의', '진�
 --EMR 항목 중 빈도 수 높지만 불필요 항목 제거
 
 
-DROP TABLE IF EXISTS ods_daily.itf_emr_frm_1 ;;
+DROP TABLE IF EXISTS itfcdmpv532_daily.itf_emr_frm_1 ;;
 --1.일반 항목(텍스트, 날짜, 숫자등)
-create TABLE ods_daily.itf_emr_frm_1 AS
+create TABLE itfcdmpv532_daily.itf_emr_frm_1 AS
 SELECT DISTINCT
      A.PTNT_NO AS patno
     ,A.MED_TIME AS medical_dt
@@ -46,8 +46,8 @@ select (SELECT last_value FROM etl_task_check_grp_id), 'itf_emr_frm_1' , 'itf_em
 from itfcdmpv532_daily.itf_emr_frm_1 ;
 
 --2.항목별 종류 (콤보박스, 라디오버튼, 체크박스형태) 
-DROP TABLE IF EXISTS ods_daily.itf_emr_frm_2 ;;
-CREATE TABLE ods_daily.itf_emr_frm_2 AS
+DROP TABLE IF EXISTS itfcdmpv532_daily.itf_emr_frm_2 ;;
+CREATE TABLE itfcdmpv532_daily.itf_emr_frm_2 AS
 SELECT DISTINCT
      A.PTNT_NO AS patno
     ,A.MED_TIME AS medical_dt
@@ -81,8 +81,8 @@ select (SELECT last_value FROM etl_task_check_grp_id), 'itf_emr_frm_2' , 'itf_em
 from itfcdmpv532_daily.itf_emr_frm_2 ;        
 
 --3.표 형태
-DROP TABLE IF EXISTS ods_daily.itf_emr_frm_3 ;;
-create TABLE ods_daily.itf_EMR_FRM_3 AS
+DROP TABLE IF EXISTS itfcdmpv532_daily.itf_emr_frm_3 ;;
+create TABLE itfcdmpv532_daily.itf_emr_frm_3 AS
 SELECT DISTINCT
     A.PTNT_NO AS patno
     ,A.MED_TIME AS medical_dt
@@ -117,8 +117,8 @@ from itfcdmpv532_daily.itf_emr_frm_3 ;
 
 
 --4.표형식 내의 항목 종류(콤보박스, 라디오버튼, 체크박스형태)
-DROP TABLE IF EXISTS ods_daily.itf_emr_frm_4 ;;
-CREATE TABLE ods_daily.itf_EMR_FRM_4 AS
+DROP TABLE IF EXISTS itfcdmpv532_daily.itf_emr_frm_4 ;;
+CREATE TABLE itfcdmpv532_daily.itf_emr_frm_4 AS
 SELECT DISTINCT
      A.PTNT_NO AS patno
     ,A.MED_TIME AS medical_dt
